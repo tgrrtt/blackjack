@@ -6,6 +6,8 @@ class window.App extends Backbone.Model
     @set 'playerHand', @get('deck').dealPlayer()
     @set 'dealerHand', @get('deck').dealDealer()
     @get('playerHand').on('hit', @checkPlayerHand, this)
+    @get('playerHand').on('stand', @playDealer, this)
+
     @checkInitialScores()
 
   checkPlayerHand: ->
@@ -25,10 +27,31 @@ class window.App extends Backbone.Model
   newDeck: ->
 
   newHand: ->
+    # if deck length < 26
+    # reset everything (but not chip count)
     # reset hand collection ( not delete)
     # pop 2 cards off deck
     newPlayerHand = [@get('deck').pop(),@get('deck').pop()]
     # add them to hands
     @get('playerHand').reset(newPlayerHand)
-    console.log(@get('playerHand').scores())
+    newDealerHand = [@get('deck').pop().flip(),@get('deck').pop()]
+    @get('dealerHand').reset(newDealerHand)
     @trigger('newHand')
+
+# after either the player busts or stands
+# dealer goes.
+  playDealer: ->
+    dlrScores = @get('dealerHand').dealerScores()
+    console.log('before dealer hit', dlrScores)
+
+    # if dealer hand[1]
+    #   hit if dealer hand[1] < 18
+    # else if dealer hand[0] < 17
+    #   hit
+
+    while (dlrScores[1]<= 17) or ((not dlrScores[1]) and (dlrScores[0]<=16))
+      @get('dealerHand').hit()
+      dlrScores = @get('dealerHand').dealerScores()
+      console.log dlrScores
+
+
