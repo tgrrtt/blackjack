@@ -12,7 +12,8 @@ class window.App extends Backbone.Model
 
   checkPlayerHand: ->
     scores = @get('playerHand').scores()
-    console.log scores
+    if scores[0] > 21
+      @outcomes('player bust')
 
   checkInitialScores: ->
     playerScores = @get('playerHand').scores()
@@ -20,9 +21,9 @@ class window.App extends Backbone.Model
     # console.log playerScores
     # console.log dealerScores
     if (playerScores[1] == 21)
-      console.log('Player BlackJack')
+      @outcomes('player blackjack');
     if (dealerScores[1] == 21)
-      console.log('Dealer BlackJack')
+      @outcomes('dealer blackjack');
 
   newHand: ->
     # if deck length < 26
@@ -41,25 +42,27 @@ class window.App extends Backbone.Model
     dlrScores = @get('dealerHand').dealerScores()
     console.log('before dealer hit', dlrScores)
 
-    # if dealer hand[1]
-    #   hit if dealer hand[1] < 18
-    # else if dealer hand[0] < 17
-    #   hit
-
     while (dlrScores[1]<= 17) or ((not dlrScores[1]) and (dlrScores[0]<=16))
       @get('dealerHand').hit()
       dlrScores = @get('dealerHand').dealerScores()
       console.log dlrScores
 
-  outcomes: (eventType) ->
-    if eventType is 'player blackjack'
-      console.log('player blackjack!')
-    else if eventType is 'dealer blackjack'
-      console.log('dealer blackjack!')
-    else if eventType is 'player bust'
-      console.log('player busted!')
-    else if eventType is 'dealer bust'
-      console.log('dealer busted!')
+    if dlrScores[1] > 21
+      @outcomes('dealer bust')
     else
-      # compare scores
+      @outcomes('compare scores')
+
+  outcomes: (eventType) ->
+    switch eventType
+      when 'player blackjack'
+        console.log('player blackjack!')
+      when 'dealer blackjack'
+        console.log('dealer blackjack!')
+      when 'player bust'
+        console.log('player busted!')
+      when 'dealer bust'
+        console.log('dealer bust')
+      else
+        # compare scores
+        console.log('scores compared')
 
