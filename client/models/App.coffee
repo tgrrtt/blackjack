@@ -24,8 +24,6 @@ class window.App extends Backbone.Model
     if (dealerScores[1] == 21)
       console.log('Dealer BlackJack')
 
-  newDeck: ->
-
   newHand: ->
     # if deck length < 26
     # reset everything (but not chip count)
@@ -38,9 +36,8 @@ class window.App extends Backbone.Model
     @get('dealerHand').reset(newDealerHand)
     @trigger('newHand')
 
-# after either the player busts or stands
-# dealer goes.
   playDealer: ->
+    @get('dealerHand').at(0).flip()
     dlrScores = @get('dealerHand').dealerScores()
     console.log('before dealer hit', dlrScores)
 
@@ -54,4 +51,15 @@ class window.App extends Backbone.Model
       dlrScores = @get('dealerHand').dealerScores()
       console.log dlrScores
 
+  outcomes: (eventType) ->
+    if eventType is 'player blackjack'
+      console.log('player blackjack!')
+    else if eventType is 'dealer blackjack'
+      console.log('dealer blackjack!')
+    else if eventType is 'player bust'
+      console.log('player busted!')
+    else if eventType is 'dealer bust'
+      console.log('dealer busted!')
+    else
+      # compare scores
 
