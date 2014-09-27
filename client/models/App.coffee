@@ -3,8 +3,8 @@ class window.App extends Backbone.Model
 
   initialize: ->
     @set 'deck', deck = new Deck()
-    @set 'playerHand', deck.dealPlayer()
-    @set 'dealerHand', deck.dealDealer()
+    @set 'playerHand', @get('deck').dealPlayer()
+    @set 'dealerHand', @get('deck').dealDealer()
     @get('playerHand').on('hit', @checkPlayerHand, this)
     @checkInitialScores()
 
@@ -21,3 +21,14 @@ class window.App extends Backbone.Model
       console.log('Player BlackJack')
     if (dealerScores[1] == 21)
       console.log('Dealer BlackJack')
+
+  newDeck: ->
+
+  newHand: ->
+    # reset hand collection ( not delete)
+    # pop 2 cards off deck
+    newPlayerHand = [@get('deck').pop(),@get('deck').pop()]
+    # add them to hands
+    @get('playerHand').reset(newPlayerHand)
+    console.log(@get('playerHand').scores())
+    @trigger('newHand')
