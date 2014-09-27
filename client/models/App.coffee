@@ -55,14 +55,49 @@ class window.App extends Backbone.Model
   outcomes: (eventType) ->
     switch eventType
       when 'player blackjack'
-        console.log('player blackjack!')
+        alert('player blackjack!')
       when 'dealer blackjack'
-        console.log('dealer blackjack!')
+        alert('dealer blackjack!')
       when 'player bust'
-        console.log('player busted!')
+        alert('player busted!')
       when 'dealer bust'
-        console.log('dealer bust')
+        alert('dealer bust')
       else
         # compare scores
         console.log('scores compared')
+        playerScore = if @get('playerHand').scores()[1] <= 21 then @get('playerHand').scores()[1] else @get('playerHand').scores()[0]
+        dealerScore = if @get('dealerHand').scores()[1] <= 21 then @get('dealerHand').scores()[1] else @get('dealerHand').scores()[0]
+        if playerScore == dealerScore
+          alert('push!')
+        else if playerScore > dealerScore
+          alert('You Win!')
+        else
+          alert('You Suck At LIFE!')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
